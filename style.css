@@ -1,0 +1,20 @@
+body {
+	display: flex;
+	justify-content: center;
+}
+
+.game-container {
+	width: 20rem;
+}
+
+.segments {
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.grid-segment {
+	border: 2px solid blue;
+	flex: 1 1 5rem;
+	height: 5rem;
+}
