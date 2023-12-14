@@ -13,8 +13,22 @@ body {
 	flex-wrap: wrap;
 }
 
-.grid-segment {
-	border: 2px solid blue;
+.game-square {
+	border: 2px solid white;
 	flex: 1 1 5rem;
 	height: 5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: xx-large;
+	background-color: rgb(137, 137, 185);
+}
+
+.game-square:hover {
+	background-color: aliceblue;
+	cursor: pointer;
+}
+
+.game-square.clicked {
+	opacity: 0.5;
 }
