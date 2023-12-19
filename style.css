@@ -1,13 +1,16 @@
 body {
 	display: flex;
 	justify-content: center;
+	background-image: url(./images/tic-tac-toe.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .game-container {
 	width: 20rem;
 }
 
-.segments {
+.game-board {
 	height: 100%;
 	display: flex;
 	flex-wrap: wrap;

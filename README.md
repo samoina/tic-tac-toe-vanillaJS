@@ -44,7 +44,7 @@ BEGINNER FRIENDLY GUIDE TO THE TIC TAC TOE GAME USING VANILLA HTML, CS AND JS.
 
 1. The first thing that I did was to create a 3X3 grid to showcase the game board. I created a main section and then a parent for 9 divs. Each of the divs would provide the space for the game elements.
 
-2. I created a sequence of event as they would unfold once the game starts. The first player clicks an empty square and their symbol goes on it. The next player clicks on any of the remaining squares and the other symbol goes on it. This goes on in turns.
+2. I created a sequence of event as they would unfold once the game starts. The first player clicks an empty square and their symbol goes on it. The next player clicks on any of the remaining squares and the other symbol goes on it. This goes on in turns until the entire grid is full.
 
 3. To do this, I needed to create variables in my scripts file - including the player and an array that keeps track of the current state of the game. So initially, this array is empty. this array would, ideally be a multi-dimensional array with three rows. Each of the array elements should reflect the position of the grid boxes that a player can click.
 
@@ -228,6 +228,14 @@ console.log(diagonalValues);
 - CSS custom properties
 - Flexbox
 - Vanilla Javascript
+
+### Pseudo code
+
+The players play the game, clicking in turns until the grid is full.
+
+- Worth noting: a grid box can only be clicked once.
+- add logic for creating X's and O's in turn.
+  once a div has bn clicked on, push it to a new array, and if the length of hat array =
 
 ### What I learned
 
