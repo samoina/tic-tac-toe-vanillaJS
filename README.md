@@ -40,176 +40,97 @@ Users should be able to:
 
 ### My approach
 
-BEGINNER FRIENDLY GUIDE TO THE TIC TAC TOE GAME USING VANILLA HTML, CS AND JS.
-
-1. The first thing that I did was to create a 3X3 grid to showcase the game board. I created a main section and then a parent for 9 divs. Each of the divs would provide the space for the game elements.
-
-2. I created a sequence of event as they would unfold once the game starts. The first player clicks an empty square and their symbol goes on it. The next player clicks on any of the remaining squares and the other symbol goes on it. This goes on in turns until the entire grid is full.
-
-3. To do this, I needed to create variables in my scripts file - including the player and an array that keeps track of the current state of the game. So initially, this array is empty. this array would, ideally be a multi-dimensional array with three rows. Each of the array elements should reflect the position of the grid boxes that a player can click.
+1. the idea is to have a hyptothetical board that informs what all the possible winning combinations look like. This will be a 2D array - an array with nested arrays.
 
 ```javascript
-let gameArray = [
-	['1', '2', '3'],
-	['4', '5', '6'],
-	['7', '8', '9'],
+/*
+my hypothetical board to rep the 3X3 grid
+  [0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+*/
+```
+
+2. I then created the variables I would need, including variables for:
+
+- the gameboard to attach an eventListener to
+- to display the winner message/ whose turn it is to play
+- the 8 possible winning combinations for a 3X3 tic tac toe game
+- a counter (initialized to 0), playerTurn ( a boolean where if true, it is player X turn to play) and two arrays to reflect the position of the players.
+
+```javascript
+const gameBoard = document.querySelector('.game-board');
+
+const displayPlayerTurn = document.querySelector('.display-player');
+
+const listWinningCombi = [
+	//rows
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	//cols
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	//diagonals
+	[0, 4, 8],
+	[2, 4, 6],
 ];
+
+let playerCount = 0,
+	playerTurn = true,
+	playerXArr = [],
+	playerYArr = [];
 ```
 
-PS:: Thinking about this implementation made me realize a gap in my understanding of arrays and algorithms. I went ahead to look up 'Arrays and data structures'
+3. I also need to add an event listener onto the game board so that when clicked, i can keep track of the game's state. First, i need to check if the clicked box is empty, and if it is, check whose turn it is, and then change the content on that specific game square to include the player symbol. I then pushed its position into the specific player's array, increased the counter, checked whose turn it was next and finally checked the game score. I do this for playerO as well, and make sure to change the boolean check on playerturn.
 
-4. The next thing that I did was to find a way to access the different array elements. For instance, to access the middle grid box, this is what I would have to type:
+NOTE: In my code, the classes provided for each of the squares, 0 through to 8 are exactly similar to the positions I am checking for on the hypothetical game board. This way, when a game square is clicked, its first class will be equivalent to the position i need to track on the grid box.
 
-```javascript
-console.log(gameArray[1][1]); //5
-```
-
-5. Up next was to figure out how to add an event listener so that when a specific element is clicked, it alerts me with the same. I figured this is the only way to keep track of the state of the game, and which grid boxes have been clicked on. This is what I had initially and quickly ran into an error :-) Can you tell why from the code below?
+To do this, I extract the first class name from the [`classList`](https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList) property of the specific game square, index[0] I have clicked, and assign it to the variable `playerPosition`. Since the class is a string, I use the unary plus operator just before the operand so as to convert it to a number, which I then push into the array.
 
 ```javascript
-let midElement = gameArray[1][1];
+//function to add player's symbol on click
+const addSymbol = (ev) => {
+	let gameSquare = ev.target;
+	//if the grid box is empty, AND playerTurn is true, it is X turn to play. so display X
+	if (gameSquare.textContent === '' && playerTurn === true) {
+		gameSquare.textContent = 'X';
+		let playerPosition = +gameSquare.classList[0];
 
-midElement.addEventListener('click', () => {
-	console.log('clicked!');
-});
-```
-
-That's because I was trying to call use the `addEventListener` method on an array element and that is not a valid DOM element.
-
-<!-- I then decided to give the first element an id that reflects the posiion on the array, and then tried clicking on the particular element and it worked.
-
-```javascript
-let boxElement1 = document.getElementById('0-0');
-
-boxElement1.addEventListener('click', function () {
-	console.log('Clicked object1');
-});
-``` -->
-
-So, I figured I needed to create an array of these elements using the `getElementsByClassName` method to give me an iterable HTMLCollection of elements. I then used a `For-of Loop` to loop through the elements and attach an event listener to the element. The idea here being, in the first iteration, place an X on the element clicked. In the next iteration, place an O, repeat this until all the boxes are filled. Here's what I came up with, and again, it did not work ;-(
-
-```javascript
-let currentPlayer = 'X';
-let gameElements = document.getElementsByClassName('game-square');
-
-for (const element of gameElements) {
-	element.addEventListener('click', function () {
-		element.innerHTML = currentPlayer;
-		if ((currentPlayer = 'X')) {
-			element.innerHTML = 'O';
-		}
-	});
-}
-```
-
-The above code did not work because I was using the assignement operator within the if-statement instead of using the equality operator to check so that the condition would always be true and I would always get the 'X'. Additionally, I also made the mistake of changing the value of the element's inner HTML instead of the value of the currentPlayer. To correct this I needed to use the equality operator as well as update the currentPlayer to alternate . Here's the updated code:
-
-```javascript
-let currentPlayer = 'X';
-
-for (const element of gameElements) {
-	element.addEventListener('click', function () {
-		element.innerHTML = currentPlayer;
-		if (currentPlayer === 'X') {
-			currentPlayer = 'O';
-		} else {
-			currentPlayer = 'X';
-		}
-
-		element.style.backgroundColor = 'gray';
-	});
-}
-```
-
-6. If an element has been clicked on, it cannot be clicked again. I learned that the `.addEventListener()` method has an additional parameter called `options - once` in which I can set the event listener to fire only once by adding the boolean `true`, thus making the element clickable only for the first time.
-
-I also created the toggle function separately then included an anonymous function in the `addEventListener` so that the function would not be invoked immeadiately. I also added a new class to change the opacity of the element once clicked on as below.
-
-```javascript
-let gameElements = document.getElementsByClassName('game-square');
-
-const toggleCurrentPlayer = (gameElement) => {
-	gameElement.innerHTML = currentPlayer;
-	if (currentPlayer === 'X') {
-		currentPlayer = 'O';
-	} else {
-		currentPlayer = 'X';
+		playerXArr.push(playerPosition);
+		incrCounter();
+		checkPlayerTurn();
+		checkScore();
 	}
 
-	gameElement.classList.add('clicked');
+	if (gameSquare.textContent === '' && playerTurn === false) {
+		gameSquare.textContent = 'O';
+		let playerPosition = +gameSquare.classList[0];
+
+		playerOArr.push(playerPosition);
+		incrCounter();
+		checkPlayerTurn();
+		checkScore();
+	}
 };
 
-//Loop through the elements and add an event listene to each element
-for (const element of gameElements) {
-	element.addEventListener(
-		'click',
-		() => {
-			toggleCurrentPlayer(element);
-		},
-		{
-			once: true,
-		}
-	);
-}
+gameBoard.addEventListener('click', addSymbol);
 ```
-
-7. Once this was done, I needed to figure out the Javascript logic of the game with the 2D array I created at the onset of the game. Tic-Tac-Toe can only end in two possible ways :
-
-I. A win or loss - If a player's symbol occurs three times horizontally, vertically or diagonally, then that player wins.
-
-Pseudocode: I would need to create a function that takes in the grid/nested arrays representing the board game. Since this is a 2D-array, I could traverse it with nested loops.
-
-_Check the rows_
-So ideally, I need to loop through the grid and check each of the rows. this is achievable by creating variables that correspond to each of the elements in the arrays that represent the rows. If the first element of the first array is occupied, and the value of it is strictly equal to that of the second and third indices, then that returns a win. That checks for the horizontal rows. We also need to check within the columns.
-
-_Check the columns_
-To check the columns, we use the same approach. We need to loop through
-
-II. A draw - in this case, the entire grid is filled with 'X' and 'O', and none of these are placed consecutively whether horizontally, vertically or diagonally.
 
 ```javascript
-let gameBoard = [
-	['1', '2', '3'],
-	['4', '5', '6'],
-	['7', '8', '9'],
-];
 
-const rows = 3;
-const columns = 3;
-const diagonalValues = [];
-
-//this would actually check for the rows equality
-for (let i = 0; i < rows; i++) {
-	const a = gameBoard[i][0];
-	const b = gameBoard[i][1];
-	const c = gameBoard[i][2];
-
-	console.log(a);
-
-	a === 1 && diagonalValues.push(a);
-
-	//in the first iteration, a=1, b=2, c=3
-	//in the second iteration, a=4, b=5, c=6
-	//in the third iteration, a=7, b=8, c=9
-	//so now we need to check, if a is not empty, and it is strictly equal to b and  is strictly equal to c, then that is a win.
-
-	//i now need to do another set of iteration where i get the columns, this would be the inner array we are looping over
-	for (let j = 0; j < columns; j++) {
-		const d = gameBoard[0][j];
-		const e = gameBoard[1][j];
-		const f = gameBoard[2][j];
-
-		//in the first iteration d=1, e=4 and f=7
-		//in the second iteration d=2, e=5 and f=8
-		//in the third iteration d=3, e=6 and f=9
-		//so the same logic applies. we need to check that d which is at the to of the column, is not empty, and then check it d is strictly equal to e and if e is strictly equal to f then that is also a win
-
-		//there is also a win if the diagonals are matching, but how do i get the diagonals during the iterations?
-	}
-}
-
-console.log(diagonalValues);
 ```
+
+4. To check for the scores: for a win, i need to loop thru the array containing the possible combinations and then check, whether for each nested array, the winning combination contains each and every index in the player's array. if so, that particular player has won.
+
+One of the things that was confusing me earlier on was pushing the player symbol to the array and then wondering how to check that against the id or its position on the gameboard. so for now this approach makes sense to me.
+
+For some reason, it just hit me this afternoon that a draw occurs when the counter gets to 9, because that would mean that no player has a straight streak of the rows, columns or diagonals.
+
+5.
+
+and include a message of whose turn it is then check for a win. i check for a win with every click.
 
 ### Screenshot
 

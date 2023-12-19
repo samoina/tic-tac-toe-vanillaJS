@@ -1,20 +1,3 @@
-/*
-1. the idea is to have a hyptothetical board that informs what all the possible winning combinations look like. 
-
-2. i will then keep track of the clicks on the grid boxes. At the onset, as is the player convention, player X gets the first go.
-
-3. Depending on which player has clicked, the player's grid box position is pushed into the specific player array. 
-
-4. To check for the scores: for a win, i need to loop thru the array containing the possible combinations and then check, whether for each nested array, the winning combination contains each and every index in the player's array. if so, that particular player has won. 
-
-One of the things that was confusing me earlier on was pushing the player symbol to the array and then wondering how to check that against the id or its position on the gameboard. so for now this approach makes sense to me. 
-
-For some reason, it just hit me this afternoon that a draw occurs when the counter gets to 9, because that would mean that no player has a straight streak of the rows, columns or diagonals. 
-
-5. i also need to add an event listener so that when clicked, i can keep track of the game's state. When clicked, i need to check if the box is empty firstly, and if it is, check whose turn it is, and then change the content on that grid-box, add the counter, push it into the array and include a message of whose turn it is then check for a win. i check for a win with every click. 
-
-*/
-
 //Get the variables
 const gameBoard = document.querySelector('.game-board');
 
@@ -45,4 +28,50 @@ const listWinningCombi = [
 let playerCount = 0,
 	playerTurn = true,
 	playerXArr = [],
-	playerYArr = [];
+	playerOArr = [];
+
+//function to increase counter
+const incrCounter = () => {
+	playerCount++;
+};
+
+//function to check and change player's turn
+const checkPlayerTurn = () => {
+	if (playerTurn === true) {
+		playerTurn = false;
+	} else {
+		playerTurn = true;
+	}
+};
+
+//function to check the score
+const checkScore = () => {
+	console.log('need to check win');
+};
+
+//function to add player's symbol on click
+const addSymbol = (ev) => {
+	let gameSquare = ev.target;
+	//if the grid box is empty, AND playerTurn is true, it is X turn to play. so display X
+	if (gameSquare.textContent === '' && playerTurn === true) {
+		gameSquare.textContent = 'X';
+		let playerPosition = +gameSquare.classList[0];
+
+		playerXArr.push(playerPosition);
+		incrCounter();
+		checkPlayerTurn();
+		checkScore();
+	}
+
+	if (gameSquare.textContent === '' && playerTurn === false) {
+		gameSquare.textContent = 'O';
+		let playerPosition = +gameSquare.classList[0];
+
+		playerOArr.push(playerPosition);
+		incrCounter();
+		checkPlayerTurn();
+		checkScore();
+	}
+};
+
+gameBoard.addEventListener('click', addSymbol);
