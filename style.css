@@ -1,9 +1,6 @@
 body {
 	display: flex;
 	justify-content: center;
-	/* background-image: url(./images/tic-tac-toe.jpg);
-	background-repeat: no-repeat;
-	background-size: cover; */
 }
 
 .game-container {
@@ -34,4 +31,13 @@ body {
 
 .game-square.clicked {
 	opacity: 0.5;
+}
+
+.reset-button {
+	padding: 0.5rem;
+	border-radius: 5px;
+	background-color: rgb(9, 117, 9);
+	border: 2px solid white;
+	color: white;
+	display: none;
 }

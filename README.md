@@ -122,7 +122,10 @@ gameBoard.addEventListener('click', addSymbol);
 
 ```
 
-4. To check for the scores: for a win, i need to loop thru the array containing the possible combinations and then check, whether for each nested array, the winning combination contains each and every index in the player's array. if so, that particular player has won.
+4. The next step is to check for the game score.
+   A game draw/tie occurs when the game ends with no winner. That is, none of the players had their symbls in a row. Logic wise, this is the easiest place to start because it means that all of the game squares are filled, the counter is 9 and there is no winning combination.
+
+To check for the scores: for a win, i need to loop thru the array containing the possible combinations and then check, whether for each nested array, the winning combination contains each and every index in the player's array. if so, that particular player has won.
 
 One of the things that was confusing me earlier on was pushing the player symbol to the array and then wondering how to check that against the id or its position on the gameboard. so for now this approach makes sense to me.
 
@@ -156,11 +159,13 @@ The players play the game, clicking in turns until the grid is full.
 
 - Worth noting: a grid box can only be clicked once.
 - add logic for creating X's and O's in turn.
-  once a div has bn clicked on, push it to a new array, and if the length of hat array =
+  once a div has bn clicked on, push it to a new array, and if the length of that array =
 
 ### What I learned
 
 ### Continued development
+
+I read about the MinMax algorithm and I look forward to uilding on that too once the basic version of this game is done.
 
 I am keen to repeat this project using ReactJS.
 
