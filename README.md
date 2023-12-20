@@ -125,15 +125,70 @@ gameBoard.addEventListener('click', addSymbol);
 4. The next step is to check for the game score.
    A game draw/tie occurs when the game ends with no winner. That is, none of the players had their symbls in a row. Logic wise, this is the easiest place to start because it means that all of the game squares are filled, the counter is 9 and there is no winning combination.
 
-To check for the scores: for a win, i need to loop thru the array containing the possible combinations and then check, whether for each nested array, the winning combination contains each and every index in the player's array. if so, that particular player has won.
+To check for the scores: for a win, i need to loop thru the array containing the possible combinations and then check, whether for each nested array, the player's array contains each and every index in the winning combination array. if so, that particular player has won.
 
 One of the things that was confusing me earlier on was pushing the player symbol to the array and then wondering how to check that against the id or its position on the gameboard. so for now this approach makes sense to me.
 
 For some reason, it just hit me this afternoon that a draw occurs when the counter gets to 9, because that would mean that no player has a straight streak of the rows, columns or diagonals.
 
-5.
+I also had some trouble figuring the .every() method and even wrote a blogpost on it. I will include the LINKKKKKKKKKKKKKKKK.
 
-and include a message of whose turn it is then check for a win. i check for a win with every click.
+```javascript
+/function to check the score
+const checkScore = () => {
+	//if Game ends in a win lop thru the possible combinations
+	for (let i = 0; i < listWinningCombi.length; i++) {
+		let singleWinCombi = listWinningCombi[i];
+
+		//a return KW in my .every() function was cracking my code. it is either explicit or implied. i hadn't included either in my earlier code
+		if (singleWinCombi.every((winIndex) => playerXArr.includes(winIndex))) {
+			displayPlayerTurn.textContent = 'Game Over - Player X wins the game!';
+			gameBoard.removeEventListener('click', addSymbol);
+			return; //remember to add the return to ensure that the funtion exits and does not check for a draw
+		}
+		if (singleWinCombi.every((winIndex) => playerOArr.includes(winIndex))) {
+			displayPlayerTurn.textContent = 'Game Over - Player O wins the game!';
+			gameBoard.removeEventListener('click', addSymbol);
+			return;
+		}
+	}
+
+	//game draw
+	if (playerCount === 9) {
+		displayPlayerTurn.textContent =
+			'Game Over - XOXO!! The game ends in a draw';
+	}
+};
+```
+
+When i first wrote this code, I kept wondering why it wouldn't run, only to realize that I did not have any return from the .every() method - whether implicit or explicit in the code comments.
+
+5. The last thing that I did for the most basic version of this Tic-Tac-Toe game was to activate the 'Restart Game' button. When a user clicks this button, it invokes the `resetGame` function. This resets the game variables and restarts game as shown in the code below.
+
+```javascript
+const resetGame = () => {
+	console.log('reset');
+
+	const gameSquares = document.querySelectorAll('.game-square');
+	gameSquares.forEach((gameSquare) => {
+		gameSquare.textContent = '';
+	});
+
+	//reset the player arrays
+	playerXArr = [];
+	playerOArr = [];
+
+	//reset the counter and player turn and display message
+	playerCount = 0;
+	playerTurn = true;
+	displayPlayerTurn.textContent = 'Click on any square to start the game';
+
+	//reattach the EL
+	gameBoard.addEventListener('click', addSymbol);
+};
+
+resetGameBtn.addEventListener('click', resetGame);
+```
 
 ### Screenshot
 

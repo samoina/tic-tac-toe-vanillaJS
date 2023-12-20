@@ -54,13 +54,12 @@ const checkScore = () => {
 
 		//a return KW in my .every() function was cracking my code. it is either explicit or implied. it was none for me. ChatGPT helped me figure it out
 		if (singleWinCombi.every((winIndex) => playerXArr.includes(winIndex))) {
-			displayPlayerTurn.textContent = 'Player X wins the game!';
+			displayPlayerTurn.textContent = 'Game Over - Player X wins the game!';
 			gameBoard.removeEventListener('click', addSymbol);
-		
 			return; //remember to add the return to ensure that the funtion exits and does not check for a draw
 		}
 		if (singleWinCombi.every((winIndex) => playerOArr.includes(winIndex))) {
-			displayPlayerTurn.textContent = 'Player O wins the game!';
+			displayPlayerTurn.textContent = 'Game Over - Player O wins the game!';
 			gameBoard.removeEventListener('click', addSymbol);
 			return;
 		}
@@ -68,7 +67,8 @@ const checkScore = () => {
 
 	//game draw
 	if (playerCount === 9) {
-		displayPlayerTurn.textContent = 'XOXO!! The game ends in a draw';
+		displayPlayerTurn.textContent =
+			'Game Over - XOXO!! The game ends in a draw';
 	}
 };
 
@@ -103,4 +103,26 @@ const addSymbol = (ev) => {
 	}
 };
 
+const resetGame = () => {
+	console.log('reset');
+
+	const gameSquares = document.querySelectorAll('.game-square');
+	gameSquares.forEach((gameSquare) => {
+		gameSquare.textContent = '';
+	});
+
+	//reset the player arrays
+	playerXArr = [];
+	playerOArr = [];
+
+	//reset the counter and player turn and display message
+	playerCount = 0;
+	playerTurn = true;
+	displayPlayerTurn.textContent = 'Click on any square to start the game';
+
+	//reattach the EL
+	gameBoard.addEventListener('click', addSymbol);
+};
+
 gameBoard.addEventListener('click', addSymbol);
+resetGameBtn.addEventListener('click', resetGame);
